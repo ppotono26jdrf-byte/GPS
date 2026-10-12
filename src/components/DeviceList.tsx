@@ -27,7 +27,7 @@ function DeviceList({ devices, selectedId, onSelect }: DeviceListProps) {
       <div className="sidebar__summary">
         <div className="summary-stat">
           <span className="summary-stat__value">{devices.length}</span>
-          <span className="summary-stat__label">Dispositivos</span>
+          <span className="summary-stat__label">Baterias</span>
         </div>
         <div className="summary-stat">
           <span className="summary-stat__value is-online">{onlineCount}</span>
@@ -42,7 +42,7 @@ function DeviceList({ devices, selectedId, onSelect }: DeviceListProps) {
       <div className="sidebar__search">
         <input
           type="search"
-          placeholder="Buscar dispositivo..."
+          placeholder="Buscar bateria..."
           value={query}
           onChange={(event) => setQuery(event.target.value)}
         />

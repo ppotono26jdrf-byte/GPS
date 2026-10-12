@@ -51,7 +51,7 @@ function App() {
           type="button"
           className="map-toggle"
           onClick={() => setSidebarOpen(true)}
-          aria-label="Abrir panel de dispositivos"
+          aria-label="Abrir panel de baterias"
         >
           <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
             <path

@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react'
 import type { Device } from '../types'
 
-const CENTER = { lat: 40.4168, lng: -3.7038 }
+const CENTER = { lat: 19.0414, lng: -98.2063 }
 
 const INITIAL_DEVICES: Device[] = [
-  { id: 'dev-01', name: 'Camion 01', online: true, lat: 40.4168, lng: -3.7038, battery: 92, lastUpdate: Date.now() },
-  { id: 'dev-02', name: 'Camion 02', online: true, lat: 40.4231, lng: -3.7105, battery: 78, lastUpdate: Date.now() },
-  { id: 'dev-03', name: 'Furgoneta 03', online: true, lat: 40.4098, lng: -3.6922, battery: 64, lastUpdate: Date.now() },
-  { id: 'dev-04', name: 'Movil 04', online: false, lat: 40.4315, lng: -3.7011, battery: 35, lastUpdate: Date.now() },
-  { id: 'dev-05', name: 'Sensor 05', online: true, lat: 40.4042, lng: -3.7146, battery: 88, lastUpdate: Date.now() },
-  { id: 'dev-06', name: 'Movil 06', online: true, lat: 40.4199, lng: -3.6889, battery: 51, lastUpdate: Date.now() },
-  { id: 'dev-07', name: 'Sensor 07', online: false, lat: 40.4277, lng: -3.7192, battery: 12, lastUpdate: Date.now() },
-  { id: 'dev-08', name: 'Furgoneta 08', online: true, lat: 40.4112, lng: -3.7051, battery: 73, lastUpdate: Date.now() },
+  { id: 'dev-01', name: 'Bateria 01', online: true, lat: 19.0414, lng: -98.2063, battery: 92, lastUpdate: Date.now() },
+  { id: 'dev-02', name: 'Bateria 02', online: true, lat: 19.0477, lng: -98.213, battery: 78, lastUpdate: Date.now() },
+  { id: 'dev-03', name: 'Bateria 03', online: true, lat: 19.0344, lng: -98.1947, battery: 64, lastUpdate: Date.now() },
+  { id: 'dev-04', name: 'Bateria 04', online: false, lat: 19.0561, lng: -98.2036, battery: 35, lastUpdate: Date.now() },
+  { id: 'dev-05', name: 'Bateria 05', online: true, lat: 19.0288, lng: -98.2171, battery: 88, lastUpdate: Date.now() },
+  { id: 'dev-06', name: 'Bateria 06', online: true, lat: 19.0445, lng: -98.1914, battery: 51, lastUpdate: Date.now() },
+  { id: 'dev-07', name: 'Bateria 07', online: false, lat: 19.0523, lng: -98.2217, battery: 12, lastUpdate: Date.now() },
+  { id: 'dev-08', name: 'Bateria 08', online: true, lat: 19.0358, lng: -98.2076, battery: 73, lastUpdate: Date.now() },
 ]
 
 function drift(max: number) {
