@@ -1,5 +1,5 @@
 ﻿# Rastreo GPS en tiempo real
-Aplicación web que muestra en un mapa la ubicación en tiempo real de baterías, con un listado lateral de los dispositivos. Desarrollada con React + Vite + TypeScript y Leaflet (OpenStreetMap).
+
 
 
 Aplicación web que muestra en un mapa la ubicación en tiempo real de baterías, con un listado lateral de los dispositivos. Desarrollada con React + Vite + TypeScript y Leaflet (OpenStreetMap).
@@ -95,7 +95,7 @@ src/
 ## Cómo ejecutar ambos
 
 ### 1) Backend (FastAPI)
-`ash
+`bash
 cd server
 pip install -r requirements.txt
 uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
@@ -103,7 +103,7 @@ uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 Swagger: http://localhost:8000/docs | Health: http://localhost:8000/health | Dispositivos: http://localhost:8000/devices
 
 ### 2) Frontend (React + Vite)
-`ash
+`bash
 npm.cmd run dev  # http://localhost:5173
 `
 Variables opcionales: VITE_API_URL (http://localhost:8000). El hook construye el WS automáticamente.
