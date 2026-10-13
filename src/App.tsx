@@ -3,6 +3,7 @@ import './App.css'
 import DeviceList from './components/DeviceList'
 import DeviceMap from './components/DeviceMap'
 import { useDevices } from './hooks/useDevices'
+import logo from './assets/Logo_SolyLitio.svg'
 
 function App() {
   const devices = useDevices()
@@ -20,7 +21,7 @@ function App() {
       <aside className="sidebar">
         <header className="sidebar__header">
           <div className="sidebar__brand">
-            <span className="sidebar__logo" aria-hidden="true" />
+            <img src={logo} className="sidebar__logo" alt="Logo_SolyLitio" />
             <div>
               <h1>Rastreo GPS</h1>
               <p>Monitoreo en tiempo real</p>
