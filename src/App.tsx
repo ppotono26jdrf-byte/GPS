@@ -2,11 +2,11 @@ import { useCallback, useState } from 'react'
 import './App.css'
 import DeviceList from './components/DeviceList'
 import DeviceMap from './components/DeviceMap'
-import { useDevices } from './hooks/useDevices'
+import { useDevicesWs } from './hooks/useDevicesWs'
 import logo from './assets/Logo_SolyLitio.svg'
 
 function App() {
-  const devices = useDevices()
+  const devices = useDevicesWs()
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
