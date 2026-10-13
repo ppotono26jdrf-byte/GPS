@@ -109,9 +109,3 @@ Variables opcionales: VITE_API_URL (http://localhost:8000). El hook construye el
 > Nota: en Windows PowerShell usa 
 pm.cmd (la política de ejecución bloquea 
 pm).
-
-
-
-
-
-
