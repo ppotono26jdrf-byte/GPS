@@ -1,32 +1,72 @@
-# React + TypeScript + Vite
+# Rastreo GPS en tiempo real · SolyLitio
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Aplicación web que muestra en un mapa la ubicación en tiempo real de baterías, con un listado lateral de los dispositivos. Desarrollada con React + Vite + TypeScript y Leaflet (OpenStreetMap).
 
-Currently, two official plugins are available:
+## Lo que se lleva hecho
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Mapa interactivo** con Leaflet + OpenStreetMap: un marcador por batería (verde = en línea, gris = desconectado) y leyenda del estado.
+- **Panel lateral izquierdo**:
+  - Cabecera verde `#2a6b2c` con el logo y el título "Rastreo GPS".
+  - Zona de listado en blanco: contadores (total / en línea / offline), buscador y tarjetas de batería con estado, nivel de batería, coordenadas y hora de la última actualización.
+- **Selección bidireccional**: clic en el listado → el mapa hace `flyTo` al marcador y lo resalta; clic en un marcador → lo selecciona en el listado; clic en el mapa vacío → deselecciona.
+- **Simulación en tiempo real**: las baterías se mueven y actualizan su batería y estado cada 2 segundos (los dispositivos en línea se desplazan; ocasionalmente cambian de estado). Ubicación de ejemplo centrada en **Puebla, México**.
+- **Diseño responsive**: en pantallas pequeñas el panel se desliza y aparece un botón para abrirlo/cerrarlo.
 
-## React Compiler
+## Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 19 + Vite 8 + TypeScript
+- [react-leaflet](https://react-leaflet.js.org/) 5 + [Leaflet](https://leafletjs.com/) 1.9
+- Oxlint para linting
 
-## Expanding the Oxlint configuration
+## Modelo de datos
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
+```ts
+interface Device {
+  id: string
+  name: string
+  online: boolean
+  lat: number
+  lng: number
+  battery: number
+  lastUpdate: number
 }
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Estructura de archivos
+
+```
+src/
+  main.tsx
+  App.tsx                  # layout: sidebar + mapa
+  App.css                  # estilos del layout y del listado
+  index.css                # estilos globales
+  types.ts                 # interfaz Device
+  hooks/
+    useDevices.ts          # simulación de datos en tiempo real
+  components/
+    DeviceList.tsx         # resumen + buscador + listado
+    DeviceListItem.tsx     # tarjeta de cada batería
+    DeviceMap.tsx          # contenedor del mapa (Leaflet)
+    DeviceMarker.tsx       # marcador individual
+    StatusBadge.tsx        # indicador en línea / desconectado
+  utils/
+    icons.ts               # icono SVG de los marcadores según estado
+```
+
+## Cómo ejecutar
+
+Requisitos: Node.js 18+ (probado con v24).
+
+```sh
+npm install
+npm run dev        # entorno de desarrollo (HMR)
+npm run build      # compilación y verificación de tipos (tsc -b && vite build)
+npm run lint       # lint con Oxlint
+npm run preview    # sirve la build de producción
+```
+
+> **Importante (Windows/PowerShell):** si `npm` falla por la política de ejecución de scripts, usa `npm.cmd` (p. ej. `npm.cmd run dev`) o habilítala con `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`.
+
+## Conectando el backend real (futuro)
+
+Los datos actuales son simulados. Para conectar un backend real solo hay que reemplazar la implementación de `src/hooks/useDevices.ts` (p. ej. por WebSocket o MQTT), manteniendo el contrato de la interfaz `Device`; el resto de la aplicación queda igual.
