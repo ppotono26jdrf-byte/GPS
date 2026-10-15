@@ -8,3 +8,4 @@ class Device(BaseModel):
     lng: float = Field(ge=-180, le=180)
     battery: float = Field(ge=0, le=100)
     lastUpdate: int  # epoch ms
+    source: str = "simulator"  # "simulator" | "arduino_gprs"

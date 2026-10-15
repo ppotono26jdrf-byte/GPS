@@ -48,11 +48,25 @@ class DeviceSimulator:
                     return d
             return None
 
+    async def upsert_device(self, device: Device) -> None:
+        """Inserta o actualiza un dispositivo reportado por fuente externa (Arduino GPRS)."""
+        async with self._lock:
+            for i, d in enumerate(self._devices):
+                if d.id == device.id:
+                    self._devices[i] = device
+                    return
+            self._devices.append(device)
+
     async def tick(self) -> List[Device]:
         now = _now_ms()
         async with self._lock:
             next_list: List[Device] = []
             for d in self._devices:
+                # No tocar dispositivos que vienen de fuente real (Arduino GPRS)
+                if d.source == "arduino_gprs":
+                    next_list.append(d)
+                    continue
+
                 online_new = d.online
                 if random.random() < 0.02:
                     online_new = not d.online

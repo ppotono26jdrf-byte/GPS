@@ -12,6 +12,7 @@ server/
     routers/
       devices.py      # Endpoints REST GET /devices, GET /devices/{id}
       ws_devices.py    # WebSocket /ws/devices (snapshot + updates)
+      positions.py    # POST /api/positions (tracker Arduino GPRS)
     schemas/
       device.py       # Modelo Pydantic Device (coincide con frontend)
     services/
@@ -44,6 +45,7 @@ Coincide exactamente con el `Device` del frontend:
 | `GET` | `/health` | Health check. Respuesta: `{"status":"ok"}` |
 | `GET` | `/devices` | Lista todos los dispositivos. |
 | `GET` | `/devices/{device_id}` | Obtiene un dispositivo. 404 si no existe. |
+| `POST` | `/api/positions` | Recibe posición del tracker Arduino (requiere `Authorization: Bearer <token>`). |
 
 ## WebSocket
 
@@ -90,6 +92,7 @@ Valores por defecto:
 - `PORT=8000`
 - `CORS_ORIGINS=http://localhost:5173`
 - `TICK_MS=2000`
+- `DEVICE_API_TOKEN=cambiar_por_un_token_seguro`
 
 ### 3. Ejecutar en desarrollo (con recarga automática)
 
@@ -104,6 +107,41 @@ uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 - Health: [http://localhost:8000/health](http://localhost:8000/health)
 - Dispositivos: [http://localhost:8000/devices](http://localhost:8000/devices)
 
+## Tracker Arduino (GPRS / HTTP POST)
+
+El tracker (`ArduinoGPS/ArduinoGPS/tracker-code_onlygps.ino`) envía posiciones mediante `POST` a `/api/positions`.
+
+**Payload esperado (JSON):**
+```json
+{
+  "device_id": "tracker_01",
+  "lat": 19.0414,
+  "lng": -98.2063,
+  "ts": "2026-10-15 09:12:34",
+  "sats": 8,
+  "speed_kmh": 45.20,
+  "alt_m": 2200.50
+}
+```
+
+**Autenticación:** header `Authorization: Bearer <DEVICE_API_TOKEN>`. El token debe coincidir con `.env`.
+
+**Transformación a `Device`:**
+| Arduino | `Device` backend |
+|---------|------------------|
+| `device_id` | `id` y `name` (nombre visible) |
+| `lat`, `lng` | `lat`, `lng` |
+| `ts` ("YYYY-MM-DD HH:MM:SS") | `lastUpdate` (epoch ms) |
+| *(no enviado)* | `online = true` |
+| *(no enviado)* | `battery = 100.0` (por defecto) |
+| `sats`, `speed_kmh`, `alt_m` | ignorados (metadatos futuros) |
+
+**Para pruebas con ngrok / Cloudflare:**
+1. Expón tu backend local: `ngrok http 8000` (o Cloudflare Tunnel).
+2. Copia la URL pública, ej. `https://abc123.ngrok-free.app`.
+3. En el Arduino: `serverUrl = "https://abc123.ngrok-free.app/api/positions"`.
+4. En el Arduino y `.env`: mismo `authToken`.
+
 ## Simulador
 
 - Centro: **Puebla, México** (19.0414, -98.2063)
@@ -111,6 +149,7 @@ uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 - Solo los dispositivos `online` se desplazan (drift ~0.0016)
 - Batería disminuye gradualmente (máx 0)
 - Cambio online/offline ocasional (~2 % por tick)
+- Los dispositivos reportados por el tracker Arduino (`source="arduino_gprs"`) **no son tocados** por el simulador: se conservan hasta que el Arduino los actualice nuevamente.
 - Estado en memoria (sin persistencia)
 
 ## Integración con frontend

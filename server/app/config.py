@@ -6,5 +6,6 @@ class Settings(BaseModel):
     port: int = int(os.getenv("PORT", "8000"))
     cors_origins: list[str] = os.getenv("CORS_ORIGINS", "http://localhost:5173").split(",")
     tick_ms: int = int(os.getenv("TICK_MS", "2000"))
+    device_api_token: str = os.getenv("DEVICE_API_TOKEN", "cambiar_por_un_token_seguro")
 
 settings = Settings()
